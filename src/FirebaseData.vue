@@ -13,7 +13,7 @@
 		      </div>
 		      <nav class="level-right">
 		        <div class="level">
-		          <a class="level-item">
+		          <a class="level-item" @click="editLembrete(lembrete)">
 		            <span class="icon is-small"><i class="fa fa-pencil"></i></span>
 		          </a>
 		          <a class="level-item" @click="delLembrete(lembrete)">
@@ -50,6 +50,9 @@
 			delLembrete(lembrete) {
 				let ref = firebase.database().ref('lembretes')
 				ref.child(lembrete.key).remove()
+			},
+			editLembrete(lembrete) {
+				Event.$emit('editar', { 'lembrete' : lembrete })
 			}
 		},
 		created() {

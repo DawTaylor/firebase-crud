@@ -52,8 +52,15 @@
 				return (this.errors.nome || this.errors.descricao)
 			},
 			cadastrar() {
-				console.log("Validação", this.validar())
-				if(!this.validar()){
+				if(this.lembrete.key){
+					firebase.database().ref(`lembretes/${this.lembrete.key}`).set({
+						nome : this.lembrete.nome,
+						descricao : this.lembrete.descricao
+					})
+					this.lembrete.nome = ''
+					this.lembrete.descricao = ''
+					delete this.lembrete.key
+				} else if(!this.validar()){
 					firebase.database().ref('lembretes/').push(this.lembrete).then(() => {
 						this.lembrete.nome = ''
 						this.lembrete.descricao = ''
@@ -68,6 +75,11 @@
 		},
 		created() {
 			this.validar()
+
+			Event.$on('editar', (key) => {
+				console.log(key)
+				this.lembrete = key.lembrete
+			})
 		}
 	}
 </script>
